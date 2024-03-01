@@ -33,7 +33,7 @@ export default function Home() {
           <CardHeader className="flex flex-row items-center gap-2">
             <MonitorIcon className="w-6 h-6" />
             <CardTitle>Monitors</CardTitle>
-            <Button className="ml-auto" size="xs" variant="outline">
+            <Button className="ml-auto" size="sm" variant="outline">
               Add
               <span className="sr-only">New Monitor</span>
               <PlusIcon className="w-4 h-4" />
@@ -92,7 +92,7 @@ export default function Home() {
   )
 }
 
-function AlertTriangleIcon(props) {
+function AlertTriangleIcon(props: any) {
   return (
       <svg
           {...props}
@@ -114,7 +114,7 @@ function AlertTriangleIcon(props) {
 }
 
 
-function CheckCircleIcon(props) {
+function CheckCircleIcon(props: any) {
   return (
       <svg
           {...props}
@@ -135,7 +135,7 @@ function CheckCircleIcon(props) {
 }
 
 
-function MonitorIcon(props) {
+function MonitorIcon(props: any) {
   return (
       <svg
           {...props}
@@ -157,7 +157,7 @@ function MonitorIcon(props) {
 }
 
 
-function PlusIcon(props) {
+function PlusIcon(props: any) {
   return (
       <svg
           {...props}
