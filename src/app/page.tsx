@@ -3,11 +3,12 @@ import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/compo
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Button} from "@/components/ui/button"
 import {Checkbox} from "@/components/ui/checkbox";
-// import {Services} from '@/components/service';
 import React, {Suspense} from "react";
+import dynamic from 'next/dynamic';
 import {AlertTriangleIcon, CheckCircleIcon, MonitorIcon, PlusIcon} from "@/components/icons";
 
-const Services = React.lazy(() => import('@/components/service').then(module => ({ default: module.Services })));
+const Services = dynamic(() =>
+    import('@/components/service').then(module => ({ default: module.Services })),{ ssr: false });
 
 
 export default function Home() {
@@ -93,7 +94,7 @@ export default function Home() {
                                     <AlertTriangleIcon className="w-4 h-4"/>
                                 </TableCell>
                             </TableRow>
-                            <Suspense fallback={<div>Loading...</div>}>
+                            <Suspense fallback={<>Loading...</>}>
                                 <Services />
                             </Suspense>
                         </TableBody>
