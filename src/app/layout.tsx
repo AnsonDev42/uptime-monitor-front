@@ -3,9 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
-
+const prod = process.env.PRODUCTION_FLAG === "true";
 export const metadata: Metadata = {
-  title: "🤖Uptime Monitor Demo page",
+  title: prod? "☑️Uptime Monitor Demo page" : "🚧Uptime Monitor Internal Demo page",
   description: "Uptime Monitor Internal Demo page",
 };
 
