@@ -23,7 +23,7 @@ export function Services() {
     let {data, error, isLoading} = useSWR(`${baseUrl}service/`, fetcher)
 
     if (isLoading) return <p>Loading...</p>
-    if (!data) return <p>No fetched data</p>
+    if (!data) return <p>No data fetched from {baseUrl}</p>
     if (error) return <p>Error fetching: {error}</p>
 
     return (
