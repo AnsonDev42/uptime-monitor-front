@@ -1,11 +1,11 @@
 'use client'
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import {Button} from "@/components/ui/button"
 import {Checkbox} from "@/components/ui/checkbox";
 import React, {Suspense} from "react";
 import dynamic from 'next/dynamic';
-import {AlertTriangleIcon, CheckCircleIcon, MonitorIcon, PlusIcon} from "@/components/icons";
+import {AlertTriangleIcon, CheckCircleIcon, MonitorIcon, } from "@/components/icons";
+import {CreateServiceDialog} from "@/components/service";
 
 const Services = dynamic(() =>
     import('@/components/service').then(module => ({ default: module.Services })),{ ssr: false });
@@ -43,11 +43,7 @@ export default function Home() {
                 <CardHeader className="flex flex-row items-center gap-2">
                     <MonitorIcon className="w-6 h-6"/>
                     <CardTitle>Monitors</CardTitle>
-                    <Button className="ml-auto" size="sm" variant="outline">
-                        Add
-                        <span className="sr-only">New Monitor</span>
-                        <PlusIcon className="w-4 h-4"/>
-                    </Button>
+                    <CreateServiceDialog />
                 </CardHeader>
                 <CardContent className="p-0">
                     <Table>
