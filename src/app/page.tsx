@@ -4,11 +4,12 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/c
 import {Checkbox} from "@/components/ui/checkbox";
 import React, {Suspense} from "react";
 import dynamic from 'next/dynamic';
-import {AlertTriangleIcon, CheckCircleIcon, MonitorIcon, } from "@/components/icons";
+import {AlertTriangleIcon, CheckCircleIcon, MonitorIcon,} from "@/components/icons";
 import {CreateServiceDialog} from "@/components/service";
+import {ModeToggle} from "@/components/theme-provider";
 
 const Services = dynamic(() =>
-    import('@/components/service').then(module => ({ default: module.Services })),{ ssr: false });
+    import('@/components/service').then(module => ({default: module.Services})), {ssr: false});
 
 
 export default function Home() {
@@ -43,7 +44,7 @@ export default function Home() {
                 <CardHeader className="flex flex-row items-center gap-2">
                     <MonitorIcon className="w-6 h-6"/>
                     <CardTitle>Monitors</CardTitle>
-                    <CreateServiceDialog />
+                    <CreateServiceDialog/>
                 </CardHeader>
                 <CardContent className="p-0">
                     <Table>
@@ -91,12 +92,15 @@ export default function Home() {
                                 </TableCell>
                             </TableRow>
                             <Suspense fallback={<>Loading...</>}>
-                                <Services />
+                                <Services/>
                             </Suspense>
                         </TableBody>
                     </Table>
                 </CardContent>
             </Card>
+            <div className="fixed top-4 right-4">
+                < ModeToggle/>
+            </div>
         </>
     )
 }
