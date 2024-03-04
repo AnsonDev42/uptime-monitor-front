@@ -6,7 +6,7 @@ import {Checkbox} from "@/components/ui/checkbox";
 import React from 'react';
 import {formatDistance} from 'date-fns';
 import {AlertTriangleIcon, CheckCircleIcon, PlusIcon} from "@/components/icons";
-import { Button } from "@/components/ui/button"
+import {Button} from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
@@ -15,8 +15,9 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import {Input} from "@/components/ui/input"
+import {Label} from "@/components/ui/label"
+
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 interface ServiceData {
@@ -33,8 +34,26 @@ export function Services() {
     let {data, error, isLoading} = useSWR(`${baseUrl}service/`, fetcher)
 
     if (isLoading) return <p>Loading...</p>
-    if (!data) return <p>No data fetched from {baseUrl}</p>
-    if (error) return <p>Error fetching: {error}</p>
+    if (!data) return (<><TableRow>
+        <TableCell>
+        </TableCell>
+        <TableCell>
+        </TableCell>
+        <TableCell>No data loaded from {baseUrl}, please add a service! </TableCell>
+        <TableCell>
+            <AlertTriangleIcon className="w-4 h-4"/>
+        </TableCell>
+    </TableRow></>)
+    if (error) return (<><TableRow>
+        <TableCell>
+        </TableCell>
+        <TableCell>
+        </TableCell>
+        <TableCell><p>Error fetching: {error}</p> </TableCell>
+        <TableCell>
+            <AlertTriangleIcon className="w-4 h-4"/>
+        </TableCell>
+    </TableRow></>)
 
     return (
         <>
@@ -62,7 +81,7 @@ export function CreateServiceDialog() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button  className="ml-auto" size="sm" variant="outline">
+                <Button className="ml-auto" size="sm" variant="outline">
                     New Monitor
                     <PlusIcon className="w-4 h-4"/>
                 </Button>
