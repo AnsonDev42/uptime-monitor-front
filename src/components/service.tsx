@@ -51,7 +51,7 @@ export function Services() {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000/";
     let {data, error, isLoading} = useSWR(`${baseUrl}service/`, fetcher)
 
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return <>Loading...</>
     if (!data) return (<><TableRow>
         <TableCell>
         </TableCell>
@@ -67,7 +67,7 @@ export function Services() {
         </TableCell>
         <TableCell>
         </TableCell>
-        <TableCell><p>Error fetching: {error}</p> </TableCell>
+        <TableCell>Error fetching: {error}</TableCell>
         <TableCell>
             <AlertTriangleIcon className="w-4 h-4"/>
         </TableCell>
@@ -76,7 +76,7 @@ export function Services() {
     return (
         <>
             {data.map((service: ServiceData) => (
-                <TableRow key={service.id}>
+                <TableRow key={service.id + 3}>
                     <TableCell>
                         <Checkbox/>
                     </TableCell>
