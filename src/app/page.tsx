@@ -5,9 +5,8 @@ import {Checkbox} from "@/components/ui/checkbox";
 import React, {Suspense} from "react";
 import dynamic from 'next/dynamic';
 import {AlertTriangleIcon, CheckCircleIcon, MonitorIcon,} from "@/components/icons";
-import {CreateServiceDialog} from "@/components/service";
 import {ModeToggle} from "@/components/theme-provider";
-
+import DrawerDialogDemo from "@/components/service-form";
 const Services = dynamic(() =>
     import('@/components/service').then(module => ({default: module.Services})), {ssr: false});
 
@@ -41,10 +40,13 @@ export default function Home() {
                 </CardContent>
             </Card>
             <Card className="w-full max-w-3xl mx-auto">
-                <CardHeader className="flex flex-row items-center gap-2">
+                <CardHeader className="flex flex-row justify-between items-center">
+                    <span className="flex flex-row gap-2">
                     <MonitorIcon className="w-6 h-6"/>
                     <CardTitle>Monitors</CardTitle>
-                    <CreateServiceDialog/>
+
+                    </span>
+                    <DrawerDialogDemo />
                 </CardHeader>
                 <CardContent className="p-0">
                     <Table>
