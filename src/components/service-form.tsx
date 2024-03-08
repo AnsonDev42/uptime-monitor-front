@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 import {Switch} from "@/components/ui/switch";
 
-export function DrawerDialogDemo() {
+export function PopUpFormWrapper() {
     const [open, setOpen] = React.useState(false)
 
     return (
@@ -169,9 +169,9 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
 }
 
 
-export default function ServiceForm() {
-    return (
-        DrawerDialogDemo()
-    );
-
-}
+// export default function ServiceForm() {
+//     return (
+//         PopUpFormWrapper()
+//     );
+//
+// }

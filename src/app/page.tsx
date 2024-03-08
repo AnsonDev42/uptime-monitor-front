@@ -6,7 +6,7 @@ import React, {Suspense} from "react";
 import dynamic from 'next/dynamic';
 import {AlertTriangleIcon, CheckCircleIcon, MonitorIcon,} from "@/components/icons";
 import {ModeToggle} from "@/components/theme-provider";
-import DrawerDialogDemo from "@/components/service-form";
+import {PopUpFormWrapper} from "@/components/service-form";
 const Services = dynamic(() =>
     import('@/components/service').then(module => ({default: module.Services})), {ssr: false});
 
@@ -46,7 +46,7 @@ export default function Home() {
                     <CardTitle>Monitors</CardTitle>
 
                     </span>
-                    <DrawerDialogDemo />
+                    <PopUpFormWrapper />
                 </CardHeader>
                 <CardContent className="p-0">
                     <Table>
