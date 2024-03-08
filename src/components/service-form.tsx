@@ -1,5 +1,5 @@
 'use client'
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button} from "@/components/ui/button"
 
 import {
@@ -32,9 +32,9 @@ export function PopUpFormWrapper() {
             </DialogTrigger>
             <DialogContent className="max-w-4xl min-w-screen-2xl">
                 <DialogHeader>
-                    <DialogTitle>Edit profile</DialogTitle>
+                    <DialogTitle>Add monitoring service</DialogTitle>
                     <DialogDescription>
-                        Make changes to your profile here. Click save when you are done.
+                        Create a new monitoring service here. Click submit when you are done.
                     </DialogDescription>
                 </DialogHeader>
                 <ProfileForm/>
@@ -42,51 +42,87 @@ export function PopUpFormWrapper() {
         </Dialog>
     )
 
-    // return (
-    //     <Drawer open={open} onOpenChange={setOpen}>
-    //         <DrawerTrigger asChild>
-    //             <Button variant="outline">Edit Profile</Button>
-    //         </DrawerTrigger>
-    //         <DrawerContent className="flex flex-row justify-center items-center max-w-screen-md">
-    //             <DrawerHeader className="text-left">
-    //                 <DrawerTitle>Edit profile</DrawerTitle>
-    //                 <DrawerDescription>
-    //                     Make changes to your profile here. Click save when you are done.
-    //                 </DrawerDescription>
-    //             </DrawerHeader>
-    //             <ProfileForm className="px-4"/>
-    //             <DrawerFooter className="pt-2">
-    //                 <DrawerClose asChild>
-    //                     <Button variant="outline">Cancel</Button>
-    //                 </DrawerClose>
-    //             </DrawerFooter>
-    //         </DrawerContent>
-    //     </Drawer>
-    // )
 }
+// structure of channel includes url, name, details, and type
+type NotificationChannel = {
+    id: number;
+    name: string;
+    details: string;
+    type: string;
+    url: string;
+};
 
 function ProfileForm({className}: React.ComponentProps<"form">) {
-    // // State variables for each input
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [monitoringEndpoint, setMonitoringEndpoint] = useState('');
     const [isActive, setIsActive] = useState(false);
-    const [notificationChannel, setNotificationChannel] = useState('');
+    const [notificationChannel, setNotificationChannel] = useState([]);
     const [monitoringType, setMonitoringType] = useState('');
-    // You can continue for other inputs as needed
+    // States for periodic_task and its nested properties
+    const [taskName, setTaskName] = useState('');
+    const [task, setTask] = useState('');
+    const [kwargs, setKwargs] = useState('');
+    const [intervalEvery, setIntervalEvery] = useState(0);
+    const [intervalPeriod, setIntervalPeriod] = useState('');
+    const [enabled, setEnabled] = useState(false);
 
-    // Click handler for the Save button
-    const handleSaveClick = () => {
+    // Fetch Notification Channels from backend
+    useEffect(() => {
+        const fetchNotificationChannels = async () => {
+            try {
+                const response = await fetch('http://localhost:8000/notify');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                setNotificationChannel(data); // Assuming the backend returns an array of channels
+            } catch (error) {
+                console.error('Failed to fetch notification channels:', error);
+            }
+        };
+
+        fetchNotificationChannels();
+    }, []); // Empty dependency array ensures this runs once on mount
+
+    // Handler for the submit button
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault(); // Prevent the default form submission
+
+        // Structure the form data according to the JSON payload
         const formData = {
             name,
             description,
-            monitoringEndpoint,
-            isActive,
-            notificationChannel,
-            monitoringType,
-            // Add other fields as needed
+            monitoring_endpoint: monitoringEndpoint,
+            is_active: isActive,
+            notification_channel: notificationChannel,
+            monitoring_type: monitoringType,
+            periodic_task: {
+                name: taskName,
+                task,
+                kwargs,
+                interval: {
+                    every: intervalEvery,
+                    period: intervalPeriod
+                },
+                enabled
+            }
         };
-        console.log(formData); // For now, just logging. Replace this with your API call or other logic.
+
+        // Fetch API to send the form data
+        try {
+            const response = await fetch('http://localhost:8000/service/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            console.log(data); // Handle the response data as needed
+        } catch (error) {
+            console.error('There was a problem with your fetch operation:', error);
+        }
     };
 
 
@@ -139,6 +175,11 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
                             <SelectItem value="email">Email</SelectItem>
                             <SelectItem value="sms">SMS</SelectItem>
                             <SelectItem value="slack">Slack</SelectItem>
+                            {notificationChannel.map((channel:NotificationChannel) => (
+                                <SelectItem key={channel.name} value={String(channel.name)}>
+                                    {channel.name}
+                                </SelectItem>
+                            ))}
                         </SelectGroup>
                     </SelectContent>
                 </Select>
@@ -167,11 +208,3 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
         </form>
     );
 }
-
-
-// export default function ServiceForm() {
-//     return (
-//         PopUpFormWrapper()
-//     );
-//
-// }
