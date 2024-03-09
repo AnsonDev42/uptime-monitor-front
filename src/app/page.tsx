@@ -7,13 +7,14 @@ import dynamic from 'next/dynamic';
 import {AlertTriangleIcon, CheckCircleIcon, MonitorIcon,} from "@/components/icons";
 import {ModeToggle} from "@/components/theme-provider";
 import {PopUpFormWrapper} from "@/components/service-form";
-const Services = dynamic(() =>
-    import('@/components/service').then(module => ({default: module.Services})), {ssr: false});
+
+const Services = dynamic(() => import('@/components/service').then(module => ({default: module.Services})), {ssr: false});
 
 
 export default function Home() {
 
     return (
+
         <>
             <Card className="w-full max-w-3xl mx-auto">
                 <CardHeader className="grid gap-1">
@@ -46,7 +47,7 @@ export default function Home() {
                     <CardTitle>Monitors</CardTitle>
 
                     </span>
-                    <PopUpFormWrapper />
+                    <PopUpFormWrapper/>
                 </CardHeader>
                 <CardContent className="p-0">
                     <Table>
@@ -103,8 +104,7 @@ export default function Home() {
             <div className="fixed top-4 right-4">
                 < ModeToggle/>
             </div>
-        </>
-    )
+        </>)
 }
 
 

@@ -3,6 +3,7 @@ import {Inter} from "next/font/google";
 import "./globals.css";
 import {ThemeProvider} from "@/components/theme-provider"
 import React from "react";
+import {Toaster} from "@/components/ui/sonner"
 
 const inter = Inter({subsets: ["latin"]});
 const prod = process.env.PRODUCTION_FLAG === "true";
@@ -16,8 +17,7 @@ export default function RootLayout({
                                    }: Readonly<{
     children: React.ReactNode;
 }>) {
-    return (
-        <html lang="en">
+    return (<html lang="en">
         <body className={inter.className}>
         <ThemeProvider
             attribute="class"
@@ -27,7 +27,7 @@ export default function RootLayout({
         >
             {children}
         </ThemeProvider>
+        <Toaster/>
         </body>
-        </html>
-    );
+        </html>);
 }
