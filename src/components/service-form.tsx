@@ -1,5 +1,5 @@
 'use client'
-import React, {useEffect, useState} from 'react';
+import React, {FormEventHandler, useEffect, useState} from 'react';
 import {Button} from "@/components/ui/button"
 
 import {
@@ -12,15 +12,16 @@ import {
 } from "@/components/ui/dialog"
 import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select";
+import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Switch} from "@/components/ui/switch";
+import {
+    DropdownMenu, DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import {toast} from "sonner";
 
 export function PopUpFormWrapper() {
     const [open, setOpen] = React.useState(false)
@@ -37,28 +38,73 @@ export function PopUpFormWrapper() {
                         Create a new monitoring service here. Click submit when you are done.
                     </DialogDescription>
                 </DialogHeader>
-                <ProfileForm/>
+                <ProfileForm setOpen={setOpen}/>
             </DialogContent>
         </Dialog>
     )
-
 }
+
 // structure of channel includes url, name, details, and type
 type NotificationChannel = {
     id: number;
     name: string;
-    details: string;
+    details: any;
     type: string;
     url: string;
 };
 
-function ProfileForm({className}: React.ComponentProps<"form">) {
+
+interface DropdownMenuCheckboxesProps {
+    notificationChannels: NotificationChannel[]
+}
+
+function DropdownMenuCheckboxes({ notificationChannels }: DropdownMenuCheckboxesProps) {
+    const [checkedItems, setCheckedItems] = React.useState<Record<number, boolean>>({});
+
+    // Initialize checkedItems state
+    React.useEffect(() => {
+        const initialCheckedState = notificationChannels.reduce((acc, channel) => {
+            acc[channel.id] = false; // or true, if you want it to be checked initially
+            return acc;
+        }, {} as Record<number, boolean>);
+        setCheckedItems(initialCheckedState);
+    }, [notificationChannels]);
+
+    const handleCheckedChange = (channelId: number, checked: boolean) => {
+        setCheckedItems(prev => ({ ...prev, [channelId]: checked }));
+    }
+
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline">Open</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>Notification Channels</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {notificationChannels.map(channel => (
+                    <DropdownMenuCheckboxItem
+                        key={channel.id}
+                        checked={checkedItems[channel.id]}
+                        onCheckedChange={(checked) => handleCheckedChange(channel.id, checked)}
+                    >
+                        {channel.name}
+                    </DropdownMenuCheckboxItem>
+                ))}
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
+interface ProfileFormProps extends React.ComponentProps<"form"> {
+    setOpen: (open: boolean) => void; // Add setOpen prop
+}
+function ProfileForm({setOpen,className,...formProps}: ProfileFormProps) {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [monitoringEndpoint, setMonitoringEndpoint] = useState('');
     const [isActive, setIsActive] = useState(false);
-    const [notificationChannel, setNotificationChannel] = useState([]);
-    const [monitoringType, setMonitoringType] = useState('');
+    const [notificationChannel, setNotificationChannel] = useState([] );
+    const [monitoringType, setMonitoringType] = useState("http");
     // States for periodic_task and its nested properties
     const [taskName, setTaskName] = useState('');
     const [task, setTask] = useState('');
@@ -70,7 +116,7 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
     useEffect(() => {
         const fetchNotificationChannels = async () => {
             try {
-                const response = await fetch('http://localhost:8000/notify');
+                const response = await fetch('http://localhost:8000/notify/');
                 if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
                 setNotificationChannel(data); // Assuming the backend returns an array of channels
@@ -81,18 +127,20 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
 
         fetchNotificationChannels();
     }, []); // Empty dependency array ensures this runs once on mount
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     // Handler for the submit button
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault(); // Prevent the default form submission
-
+        const s = notificationChannel.map((channel: NotificationChannel) => channel.id);
+        console.log(s)
         // Structure the form data according to the JSON payload
         const formData = {
-            name,
-            description,
+            name: name,
+            description: description,
             monitoring_endpoint: monitoringEndpoint,
             is_active: isActive,
-            notification_channel: notificationChannel,
+            notification_channel:s,
             monitoring_type: monitoringType,
             periodic_task: {
                 name: taskName,
@@ -107,6 +155,7 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
 
         // Fetch API to send the form data
         try {
+            console.log(formData);
             const response = await fetch('http://localhost:8000/service/', {
                 method: 'POST',
                 headers: {
@@ -114,10 +163,18 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
                 },
                 body: JSON.stringify(formData)
             });
-
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
             console.log(data); // Handle the response data as needed
+            setIsSubmitted(true); // Update state to indicate submission success
+            setOpen(false); // Close the dialog
+            toast("A service has been created", {
+                description: "Sunday, December 03, 2023 at 9:00 AM",
+                action: {
+                    label: "Undo",
+                    onClick: () => console.log("Undo"),
+                },
+            })
         } catch (error) {
             console.error('There was a problem with your fetch operation:', error);
         }
@@ -125,14 +182,14 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
 
 
     return (
-        <form className="space-y-4 py-4" action="http://localhost:8000/notify/" method="post">
+        <form  onSubmit={handleSubmit} className="space-y-4 py-4" >
             {/* Name Input */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
                     Name
                 </Label>
                 <Input id="name" placeholder="Enter the name" value={name} onChange={(e) => setName(e.target.value)}
-                       className="col-span-3"/>
+                       className="col-span-3" />
             </div>
 
             {/* Description Input */}
@@ -156,7 +213,8 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
             {/* IsActive Checkbox */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <span className="col-span-1 text-right">Is Active</span>
-                <Switch id="isActive"/>
+                <Switch id="isActive" onCheckedChange={(checked: boolean) => setIsActive(checked)}/>
+
             </div>
 
             {/* Notification Channel Select */}
@@ -164,23 +222,7 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
                 <Label htmlFor="notificationChannel" className="text-right">
                     Notification Channel
                 </Label>
-                <Select>
-                    <SelectTrigger className="w-72">
-                        <SelectValue placeholder="Select a notification channel"/>
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                            <SelectItem value="email">Email</SelectItem>
-                            <SelectItem value="sms">SMS</SelectItem>
-                            <SelectItem value="slack">Slack</SelectItem>
-                            {notificationChannel.map((channel: NotificationChannel) => (
-                                <SelectItem key={channel.name} value={String(channel.name)}>
-                                    {channel.name}
-                                </SelectItem>
-                            ))}
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
+                <DropdownMenuCheckboxes notificationChannels={notificationChannel} />
             </div>
 
             {/* Monitoring Type Select */}
@@ -188,9 +230,9 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
                 <Label htmlFor="monitoringType" className="text-right">
                     Monitoring Type
                 </Label>
-                <Select>
-                    <SelectTrigger className="w-72">
-                        <SelectValue placeholder="Select a monitoring type"/>
+                <Select onValueChange={(monitorType)=> setMonitoringType(monitorType)}>
+                    <SelectTrigger className="w-72" >
+                        <SelectValue placeholder="Select a monitoring type" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
@@ -215,17 +257,17 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
                        }} className="col-span-3"/>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="intervalPeriod" className="text-right">
+                <Label htmlFor="interval period" className="text-right">
                     Interval Period
                 </Label>
-                <Select>
+                <Select onValueChange={(intervalPeriod)=>setIntervalPeriod(intervalPeriod)}>
                     <SelectTrigger className="w-72">
                         <SelectValue placeholder="Select a interval period"/>
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
                             <SelectItem value="seconds">Second</SelectItem>
-                            <SelectItem value="minues">Minute</SelectItem>
+                            <SelectItem value="minutes">Minute</SelectItem>
                             <SelectItem value="days">Day</SelectItem>
                         </SelectGroup>
                     </SelectContent>
