@@ -62,7 +62,6 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
     // States for periodic_task and its nested properties
     const [taskName, setTaskName] = useState('');
     const [task, setTask] = useState('');
-    const [kwargs, setKwargs] = useState('');
     const [intervalEvery, setIntervalEvery] = useState(0);
     const [intervalPeriod, setIntervalPeriod] = useState('');
     const [enabled, setEnabled] = useState(false);
@@ -98,7 +97,6 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
             periodic_task: {
                 name: taskName,
                 task,
-                kwargs,
                 interval: {
                     every: intervalEvery,
                     period: intervalPeriod
@@ -127,7 +125,7 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
 
 
     return (
-        <form className="space-y-4 py-4" action="http://localhost:8000/notify/" method="post" >
+        <form className="space-y-4 py-4" action="http://localhost:8000/notify/" method="post">
             {/* Name Input */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
@@ -158,7 +156,7 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
             {/* IsActive Checkbox */}
             <div className="grid grid-cols-4 items-center gap-4">
                 <span className="col-span-1 text-right">Is Active</span>
-                <Switch id="isActive" />
+                <Switch id="isActive"/>
             </div>
 
             {/* Notification Channel Select */}
@@ -168,14 +166,14 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
                 </Label>
                 <Select>
                     <SelectTrigger className="w-72">
-                        <SelectValue placeholder="Select a notification channel" />
+                        <SelectValue placeholder="Select a notification channel"/>
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
                             <SelectItem value="email">Email</SelectItem>
                             <SelectItem value="sms">SMS</SelectItem>
                             <SelectItem value="slack">Slack</SelectItem>
-                            {notificationChannel.map((channel:NotificationChannel) => (
+                            {notificationChannel.map((channel: NotificationChannel) => (
                                 <SelectItem key={channel.name} value={String(channel.name)}>
                                     {channel.name}
                                 </SelectItem>
@@ -192,13 +190,43 @@ function ProfileForm({className}: React.ComponentProps<"form">) {
                 </Label>
                 <Select>
                     <SelectTrigger className="w-72">
-                        <SelectValue placeholder="Select a monitoring type" />
+                        <SelectValue placeholder="Select a monitoring type"/>
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
                             <SelectItem value="http">HTTP</SelectItem>
                             <SelectItem value="tcp">TCP</SelectItem>
                             <SelectItem value="ping">Ping</SelectItem>
+                        </SelectGroup>
+                    </SelectContent>
+                </Select>
+            </div>
+            {/* Periodic Task Name Input */}
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="Interval every " className="text-right">
+                    Interval every
+                </Label>
+                <Input id="IntervalEvery" placeholder="Enter the interval, e.g., 10 " value={intervalEvery}
+                       onChange={(e) => {
+                           const newValue = parseInt(e.target.value, 10); // Convert the input value to an integer
+                           if (!isNaN(newValue)) { // Check if the conversion was successful
+                               setIntervalEvery(newValue); // Update the state with the new integer value
+                           }
+                       }} className="col-span-3"/>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="intervalPeriod" className="text-right">
+                    Interval Period
+                </Label>
+                <Select>
+                    <SelectTrigger className="w-72">
+                        <SelectValue placeholder="Select a interval period"/>
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectGroup>
+                            <SelectItem value="seconds">Second</SelectItem>
+                            <SelectItem value="minues">Minute</SelectItem>
+                            <SelectItem value="days">Day</SelectItem>
                         </SelectGroup>
                     </SelectContent>
                 </Select>
