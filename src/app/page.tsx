@@ -61,39 +61,7 @@ export default function Home() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            <TableRow>
-                                <TableCell>
-                                    <Checkbox/>
-                                </TableCell>
-                                <TableCell>API</TableCell>
-                                <TableCell>GET</TableCell>
-                                <TableCell>2m ago</TableCell>
-                                <TableCell>
-                                    <CheckCircleIcon className="w-4 h-4"/>
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <Checkbox/>
-                                </TableCell>
-                                <TableCell>Website</TableCell>
-                                <TableCell>PING</TableCell>
-                                <TableCell>5m ago</TableCell>
-                                <TableCell>
-                                    <CheckCircleIcon className="w-4 h-4"/>
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>
-                                    <Checkbox/>
-                                </TableCell>
-                                <TableCell>Database</TableCell>
-                                <TableCell>Docker</TableCell>
-                                <TableCell>1m ago</TableCell>
-                                <TableCell>
-                                    <AlertTriangleIcon className="w-4 h-4"/>
-                                </TableCell>
-                            </TableRow>
+                            < DemoTableData/>
                             <Suspense fallback={<>Loading...</>}>
                                 <Services/>
                             </Suspense>
@@ -108,3 +76,40 @@ export default function Home() {
 }
 
 
+function DemoTableData() {
+    return (<>
+            <TableRow>
+                <TableCell>
+                    <Checkbox/>
+                </TableCell>
+                <TableCell>API</TableCell>
+                <TableCell>GET</TableCell>
+                <TableCell>2m ago</TableCell>
+                <TableCell>
+                    <CheckCircleIcon className="w-4 h-4"/>
+                </TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell>
+                    <Checkbox/>
+                </TableCell>
+                <TableCell>Website</TableCell>
+                <TableCell>PING</TableCell>
+                <TableCell>5m ago</TableCell>
+                <TableCell>
+                    <CheckCircleIcon className="w-4 h-4"/>
+                </TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell>
+                    <Checkbox/>
+                </TableCell>
+                <TableCell>Database</TableCell>
+                <TableCell>Docker</TableCell>
+                <TableCell>1m ago</TableCell>
+                <TableCell>
+                    <AlertTriangleIcon className="w-4 h-4"/>
+                </TableCell>
+            </TableRow>
+        </>);
+}
