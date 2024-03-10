@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import {AlertTriangleIcon, CheckCircleIcon, MonitorIcon,} from "@/components/icons";
 import {ModeToggle} from "@/components/theme-provider";
 import {PopUpFormWrapper} from "@/components/service-form";
+import Link from "next/link";
 
 const Services = dynamic(() => import('@/components/service').then(module => ({default: module.Services})), {ssr: false});
 
@@ -16,6 +17,7 @@ export default function Home() {
     return (
 
         <>
+
             <Card className="w-full max-w-3xl mx-auto">
                 <CardHeader className="grid gap-1">
                     <CardTitle>Uptime Bot</CardTitle>
@@ -40,6 +42,13 @@ export default function Home() {
                     </div>
                 </CardContent>
             </Card>
+            <Link
+                href={{
+                    pathname: '/stats', query: {id: '17'},
+                }}
+            >
+                service 17 status
+            </Link>
             <Card className="w-full max-w-3xl mx-auto">
                 <CardHeader className="flex flex-row justify-between items-center">
                     <span className="flex flex-row gap-2">
@@ -78,38 +87,38 @@ export default function Home() {
 
 function DemoTableData() {
     return (<>
-            <TableRow>
-                <TableCell>
-                    <Checkbox/>
-                </TableCell>
-                <TableCell>API</TableCell>
-                <TableCell>GET</TableCell>
-                <TableCell>2m ago</TableCell>
-                <TableCell>
-                    <CheckCircleIcon className="w-4 h-4"/>
-                </TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell>
-                    <Checkbox/>
-                </TableCell>
-                <TableCell>Website</TableCell>
-                <TableCell>PING</TableCell>
-                <TableCell>5m ago</TableCell>
-                <TableCell>
-                    <CheckCircleIcon className="w-4 h-4"/>
-                </TableCell>
-            </TableRow>
-            <TableRow>
-                <TableCell>
-                    <Checkbox/>
-                </TableCell>
-                <TableCell>Database</TableCell>
-                <TableCell>Docker</TableCell>
-                <TableCell>1m ago</TableCell>
-                <TableCell>
-                    <AlertTriangleIcon className="w-4 h-4"/>
-                </TableCell>
-            </TableRow>
-        </>);
+        <TableRow>
+            <TableCell>
+                <Checkbox/>
+            </TableCell>
+            <TableCell>API</TableCell>
+            <TableCell>GET</TableCell>
+            <TableCell>2m ago</TableCell>
+            <TableCell>
+                <CheckCircleIcon className="w-4 h-4"/>
+            </TableCell>
+        </TableRow>
+        <TableRow>
+            <TableCell>
+                <Checkbox/>
+            </TableCell>
+            <TableCell>Website</TableCell>
+            <TableCell>PING</TableCell>
+            <TableCell>5m ago</TableCell>
+            <TableCell>
+                <CheckCircleIcon className="w-4 h-4"/>
+            </TableCell>
+        </TableRow>
+        <TableRow>
+            <TableCell>
+                <Checkbox/>
+            </TableCell>
+            <TableCell>Database</TableCell>
+            <TableCell>Docker</TableCell>
+            <TableCell>1m ago</TableCell>
+            <TableCell>
+                <AlertTriangleIcon className="w-4 h-4"/>
+            </TableCell>
+        </TableRow>
+    </>);
 }
