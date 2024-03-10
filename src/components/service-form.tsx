@@ -18,6 +18,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {toast} from "sonner";
+import {DemoNotificationData} from "@/app/demoTableData";
 
 export function PopUpFormWrapper() {
     const [open, setOpen] = React.useState(false)
@@ -136,7 +137,11 @@ export function ProfileForm({setOpen, className, ...formProps}: ProfileFormProps
                 const data = await response.json();
                 setNotificationChannel(data); // Assuming the backend returns an array of channels
             } catch (error) {
+                // @ts-ignore
+                setNotificationChannel(DemoNotificationData);
                 console.error('Failed to fetch notification channels:', error);
+                toast("An error occurred: Back-end not detected, you are on demo ", {
+                });
             }
         };
 

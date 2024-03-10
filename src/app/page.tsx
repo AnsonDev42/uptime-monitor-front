@@ -1,13 +1,13 @@
 'use client'
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import {Checkbox} from "@/components/ui/checkbox";
+import {Table, TableBody, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import React, {Suspense} from "react";
 import dynamic from 'next/dynamic';
-import {AlertTriangleIcon, CheckCircleIcon, MonitorIcon,} from "@/components/icons";
+import {MonitorIcon,} from "@/components/icons";
 import {ModeToggle} from "@/components/theme-provider";
 import {PopUpFormWrapper} from "@/components/service-form";
 import Link from "next/link";
+import {DemoTableData} from "@/app/demoTableData";
 
 const Services = dynamic(() => import('@/components/service').then(module => ({default: module.Services})), {ssr: false});
 
@@ -85,40 +85,3 @@ export default function Home() {
 }
 
 
-function DemoTableData() {
-    return (<>
-        <TableRow>
-            <TableCell>
-                <Checkbox/>
-            </TableCell>
-            <TableCell>API</TableCell>
-            <TableCell>GET</TableCell>
-            <TableCell>2m ago</TableCell>
-            <TableCell>
-                <CheckCircleIcon className="w-4 h-4"/>
-            </TableCell>
-        </TableRow>
-        <TableRow>
-            <TableCell>
-                <Checkbox/>
-            </TableCell>
-            <TableCell>Website</TableCell>
-            <TableCell>PING</TableCell>
-            <TableCell>5m ago</TableCell>
-            <TableCell>
-                <CheckCircleIcon className="w-4 h-4"/>
-            </TableCell>
-        </TableRow>
-        <TableRow>
-            <TableCell>
-                <Checkbox/>
-            </TableCell>
-            <TableCell>Database</TableCell>
-            <TableCell>Docker</TableCell>
-            <TableCell>1m ago</TableCell>
-            <TableCell>
-                <AlertTriangleIcon className="w-4 h-4"/>
-            </TableCell>
-        </TableRow>
-    </>);
-}
