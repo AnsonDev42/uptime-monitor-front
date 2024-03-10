@@ -2,14 +2,21 @@ import {TableCell, TableRow} from "@/components/ui/table";
 import {Checkbox} from "@/components/ui/checkbox";
 import {AlertTriangleIcon, CheckCircleIcon} from "@/components/icons";
 import React from "react";
+import Link from "next/link";
 
-export function DemoTableData() {
+export function DemoData() {
     return (<>
         <TableRow>
             <TableCell>
                 <Checkbox/>
             </TableCell>
-            <TableCell>API</TableCell>
+
+            <TableCell> <Link
+                href={{
+                    pathname: '/stats', query: {id: '17'},
+                }}
+            >
+                ollama API </Link></TableCell>
             <TableCell>GET</TableCell>
             <TableCell>2m ago</TableCell>
             <TableCell>
@@ -20,7 +27,12 @@ export function DemoTableData() {
             <TableCell>
                 <Checkbox/>
             </TableCell>
-            <TableCell>Website</TableCell>
+            <TableCell> <Link
+                href={{
+                    pathname: '/stats', query: {id: '17'},
+                }}
+            >
+                My blog server </Link></TableCell>
             <TableCell>PING</TableCell>
             <TableCell>5m ago</TableCell>
             <TableCell>
@@ -31,7 +43,12 @@ export function DemoTableData() {
             <TableCell>
                 <Checkbox/>
             </TableCell>
-            <TableCell>Database</TableCell>
+            <TableCell> <Link
+                href={{
+                    pathname: '/stats', query: {id: '17'},
+                }}
+            >
+                Postgres container </Link></TableCell>
             <TableCell>Docker</TableCell>
             <TableCell>1m ago</TableCell>
             <TableCell>

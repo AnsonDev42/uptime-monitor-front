@@ -18,7 +18,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {toast} from "sonner";
-import {DemoNotificationData} from "@/app/demoTableData";
+import {DemoNotificationData} from "@/app/demo-data";
 
 export function PopUpFormWrapper() {
     const [open, setOpen] = React.useState(false)
@@ -67,7 +67,7 @@ function DropdownMenuCheckboxes({notificationChannels}: DropdownMenuCheckboxesPr
 
     return (<DropdownMenu>
         <DropdownMenuTrigger asChild>
-            <Button variant="outline">Open</Button>
+            <Button variant="outline">Select notification channels</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
             <DropdownMenuLabel>Notification Channels</DropdownMenuLabel>
@@ -94,13 +94,13 @@ async function sendFormData(formData: any) {
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         console.log(data); // Handle the response data as needed
-        toast("A service has been created", {
+        toast.success("A service has been created", {
             description: "Friday, February 10, 2023 at 5:57 PM",
         });
         return true;
     } catch (error) {
         console.error('There was a problem with your fetch operation:', error);
-        toast("An error occurred: service was not created", {
+        toast.error("An error occurred: service was not created", {
             description: new Date().toLocaleString(), action: {
                 label: "Retry", onClick: () => sendFormData(formData),
             },
@@ -118,14 +118,14 @@ export function ProfileForm({setOpen, className, ...formProps}: ProfileFormProps
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [monitoringEndpoint, setMonitoringEndpoint] = useState('');
-    const [isActive, setIsActive] = useState(false);
+    const [isActive, setIsActive] = useState(true);
     const [notificationChannel, setNotificationChannel] = useState([]);
     const [monitoringType, setMonitoringType] = useState("http");
     // States for periodic_task and its nested properties
     const [taskName, setTaskName] = useState('');
     const [task, setTask] = useState('');
-    const [intervalEvery, setIntervalEvery] = useState(0);
-    const [intervalPeriod, setIntervalPeriod] = useState('');
+    const [intervalEvery, setIntervalEvery] = useState(5);
+    const [intervalPeriod, setIntervalPeriod] = useState('Minutes');
     const [enabled, setEnabled] = useState(false);
 
     // Fetch Notification Channels from backend
@@ -140,7 +140,7 @@ export function ProfileForm({setOpen, className, ...formProps}: ProfileFormProps
                 // @ts-ignore
                 setNotificationChannel(DemoNotificationData);
                 console.error('Failed to fetch notification channels:', error);
-                toast("An error occurred: Back-end not detected, you are on demo ", {
+                toast.warning("An error occurred: Back-end not detected, you are on demo ", {
                 });
             }
         };
@@ -231,7 +231,8 @@ export function ProfileForm({setOpen, className, ...formProps}: ProfileFormProps
                     <SelectGroup>
                         <SelectItem value="http">HTTP</SelectItem>
                         <SelectItem value="tcp">TCP</SelectItem>
-                        <SelectItem value="ping">Ping</SelectItem>
+                        <SelectItem value="ping">PING</SelectItem>
+                        <SelectItem value="docker">Docker</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>
@@ -255,7 +256,7 @@ export function ProfileForm({setOpen, className, ...formProps}: ProfileFormProps
             </Label>
             <Select onValueChange={(intervalPeriod) => setIntervalPeriod(intervalPeriod)}>
                 <SelectTrigger className="w-72">
-                    <SelectValue placeholder="Select a interval period"/>
+                    <SelectValue placeholder="Minutes"/>
                 </SelectTrigger>
                 <SelectContent>
                     <SelectGroup>
