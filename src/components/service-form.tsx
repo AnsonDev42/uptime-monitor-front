@@ -231,6 +231,7 @@ export function ProfileForm({
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="col-span-3"
+          required={true}
         />
       </div>
 
@@ -259,6 +260,7 @@ export function ProfileForm({
           value={monitoringEndpoint}
           onChange={(e) => setMonitoringEndpoint(e.target.value)}
           className="col-span-3"
+          required={true}
         />
       </div>
 
@@ -316,6 +318,7 @@ export function ProfileForm({
             }
           }}
           className="col-span-3"
+          required={true}
         />
       </div>
       <div className="grid grid-cols-4 items-center gap-4">
