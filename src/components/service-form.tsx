@@ -36,11 +36,22 @@ export function PopUpFormWrapper() {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
         <Button variant="outline">Edit Profile</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl min-w-screen-2xl">
+      <DialogContent
+        className="max-w-4xl min-w-screen-2xl"
+        onInteractOutside={(e) => {
+          const { originalEvent } = e.detail;
+          if (
+            originalEvent.target instanceof Element &&
+            originalEvent.target.closest(".group.toast")
+          ) {
+            e.preventDefault();
+          }
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Add monitoring service</DialogTitle>
           <DialogDescription>
@@ -164,7 +175,7 @@ export function ProfileForm({
   const [task, setTask] = useState("");
   const [intervalEvery, setIntervalEvery] = useState(5);
   const [intervalPeriod, setIntervalPeriod] = useState("Minutes");
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(true);
 
   // Fetch Notification Channels from backend
   useEffect(() => {
