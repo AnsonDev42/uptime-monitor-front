@@ -19,6 +19,8 @@ import { MonitorIcon } from "@/components/icons";
 import { ModeToggle } from "@/components/theme-provider";
 import { PopUpFormWrapper } from "@/components/service-form";
 import { DemoData } from "@/app/demo-data";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
 const Services = dynamic(
   () =>
@@ -89,6 +91,22 @@ export default function Home() {
           </Table>
         </CardContent>
       </Card>
+      {/*add some vertical distance between */}
+      <div className="h-6" />
+      <div className="justify-center items-center content-center text-center self-center">
+        <Separator className="flex-auto max-w-sm mx-auto  mb-4" />
+        <div className=" justify-center flex h-4 items-center space-x-4 text-center content-center  text-sm">
+          <Link href="https://github.com/AnsonDev42/uptime-monitor">
+            Self Host
+          </Link>
+          <Separator orientation="vertical" />
+          <div>Docs</div>
+          <Separator orientation="vertical" />
+          <Link href="https://github.com/AnsonDev42/uptime-monitor-front">
+            GitHub
+          </Link>
+        </div>
+      </div>
       <div className="fixed top-4 right-4">
         <ModeToggle />
       </div>
