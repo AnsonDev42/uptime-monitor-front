@@ -20,9 +20,10 @@ export default function Page() {
     const fetchChartData = async () => {
       try {
         const response = await fetch(
-          "http://127.0.0.1:8000/uptime/chart/?service_id=17&time_range=720",
+          "http://127.0.0.1:8000/uptime/chart/?service_id=17&time_range=1",
+          { method: "GET", headers: { "Content-Type": "application/json" } },
         );
-        if (!response.ok) throw new Error("Network response was not ok");
+        if (!response.ok) throw new Error("Failed to fetch data");
         const jsonResponse = await response.json();
         // parsing the response to summary and records(data points)
         const records: ApiResponse = jsonResponse;
@@ -46,7 +47,9 @@ export default function Page() {
       }
     };
     fetchChartData()
-      .then((jsonResponse) => {})
+      .then((jsonResponse) => {
+        // setChartData({ id: "uptime", data: parsedData });
+      })
       .catch((error) => {
         setChartData(demoChartData);
       });
