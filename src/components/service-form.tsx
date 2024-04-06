@@ -38,7 +38,16 @@ export function PopUpFormWrapper() {
   return (
     <Dialog open={open} onOpenChange={setOpen} modal={false}>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit Profile</Button>
+        {/*the button that pops up the form to add service */}
+        <div className="grid gap-1 text-center">
+          <div className="font-semibold">
+            <Button variant="outline">Add Service</Button>
+          </div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            Start monitoring a new service
+          </div>
+        </div>
+        {/*<Button variant="outline">Add Service</Button>*/}
       </DialogTrigger>
       <DialogContent
         className="max-w-4xl min-w-screen-2xl"
@@ -128,7 +137,9 @@ function DropdownMenuCheckboxes({
 async function sendFormData(formData: any) {
   try {
     console.log(formData);
-    const response = await fetch("http://localhost:8000/service/", {
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000/";
+    const response = await fetch(`${baseUrl}service/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -176,12 +187,13 @@ export function ProfileForm({
   const [intervalEvery, setIntervalEvery] = useState(5);
   const [intervalPeriod, setIntervalPeriod] = useState("Minutes");
   const [enabled, setEnabled] = useState(true);
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000/";
 
   // Fetch Notification Channels from backend
   useEffect(() => {
     const fetchNotificationChannels = async () => {
       try {
-        const response = await fetch("http://localhost:8000/notify/");
+        const response = await fetch(`${baseUrl}notify/`);
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         setNotificationChannel(data); // Assuming the backend returns an array of channels
