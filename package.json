@@ -10,7 +10,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.18",
     "@nivo/line": "^0.85.1",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
@@ -23,8 +22,6 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-toast": "^1.1.5",
     "@react-hook/media-query": "^1.1.1",
-    "@tailwindcss/forms": "^0.5.7",
-    "@tremor/react": "^3.15.0",
     "@types/object-hash": "^3.0.6",
     "axios": "latest",
     "class-variance-authority": "^0.7.0",
