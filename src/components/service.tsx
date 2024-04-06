@@ -117,33 +117,3 @@ export function Services() {
     </>
   );
 }
-
-export function CreateServiceDialog() {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="ml-auto" size="sm" variant="outline">
-          New Monitor
-          <PlusIcon className="w-4 h-4" />
-        </Button>
-      </DialogTrigger>
-
-      {/*<DialogContent className="sm:max-w-[425px]">*/}
-      <DialogContent className="w-max h-max">
-        <ScrollArea className="h-auto w-auto rounded-md border">
-          <DialogHeader>
-            <DialogTitle>Add new monitoring service</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you are done.
-            </DialogDescription>
-          </DialogHeader>
-          <PopUpFormWrapper />
-
-          <DialogFooter>
-            <Button type="submit">Save changes</Button>
-          </DialogFooter>
-        </ScrollArea>
-      </DialogContent>
-    </Dialog>
-  );
-}
