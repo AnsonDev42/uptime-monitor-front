@@ -4,23 +4,15 @@ import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ArrowRightIcon from "@/components/RightArrowIcon";
 import Link from "next/link";
-import { CurvedLineChart, UptimeRecord } from "@/components/CurveLineChart";
 import {
   ApiResponse,
-  ChartPoint,
   ChartData,
+  ChartPoint,
+  CurvedLineChart,
+  UptimeRecord,
 } from "@/components/CurveLineChart";
+import { demoChartData } from "@/app/stats/DemoChartData";
 
-const demoChartData: ChartData = {
-  id: "Uptime",
-  data: [
-    { x: "9:30", y: 99.9 },
-    { x: "9:35", y: 99.8 },
-    { x: "9:40", y: 99.7 },
-    { x: "9:45", y: 99.6 },
-    { x: "9:50", y: 99.5 },
-  ],
-};
 export default function Page() {
   const [chartData, setChartData] = useState<ChartData>(demoChartData);
 
@@ -66,7 +58,7 @@ export default function Page() {
           <CardTitle className="text-sm">
             <div className="flex items-center gap-2">
               <ArrowRightIcon className="w-6 h-6 opacity-50" />
-              <Link className="font-medium" href="/public">
+              <Link className="font-medium" href="/">
                 Back to Monitors
               </Link>
             </div>

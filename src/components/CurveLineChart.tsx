@@ -41,18 +41,11 @@ export function CurvedLineChart({
           {
             id: "Desktop",
             data: chartData.data,
-            //     [
-            //   { x: "09:40", y: 0 },
-            //   { x: "09:45", y: 20 },
-            //   { x: "09:50", y: 30 },
-            //   { x: "09:55", y: 25 },
-            //   { x: "10:00", y: 20 },
-            //   { x: "10:05", y: 30 },
-            //   { x: "10:10", y: 0 },
-            // ],
           },
         ]}
-        margin={{ top: 10, right: 10, bottom: 40, left: 40 }}
+        enablePointLabel
+        enableTouchCrosshair
+        margin={{ top: 25, right: 20, bottom: 40, left: 60 }}
         xScale={{
           type: "point",
         }}
@@ -67,11 +60,15 @@ export function CurvedLineChart({
         axisBottom={{
           tickSize: 0,
           tickPadding: 16,
+          legend: "Time",
+          legendOffset: 36,
         }}
         axisLeft={{
           tickSize: 0,
           tickValues: 5,
           tickPadding: 16,
+          legend: "Uptime Percentage (%)",
+          legendOffset: -40,
         }}
         colors={["#2563eb", "#e11d48"]}
         pointSize={6}
@@ -86,6 +83,7 @@ export function CurvedLineChart({
               fontSize: "12px",
               textTransform: "capitalize",
               borderRadius: "6px",
+              color: "red",
             },
           },
           grid: {
