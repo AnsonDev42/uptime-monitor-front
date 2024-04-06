@@ -5,25 +5,9 @@ import useSWR from "swr";
 import { Checkbox } from "@/components/ui/checkbox";
 import React from "react";
 import { formatDistance } from "date-fns";
-import {
-  AlertTriangleIcon,
-  CheckCircleIcon,
-  PlusIcon,
-} from "@/components/icons";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { PopUpFormWrapper } from "@/components/service-form";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { AlertTriangleIcon, CheckCircleIcon } from "@/components/icons";
+
 import Link from "next/link";
-import { toast } from "sonner";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -101,7 +85,7 @@ export function Services() {
           <TableCell>{service.name}</TableCell>
           <TableCell>{service.monitoring_type}</TableCell>
           <TableCell>
-            {formatDistance(service.updated_at, new Date(), {
+            {formatDistance(new Date(service.updated_at), new Date(), {
               addSuffix: true,
             })}
           </TableCell>
