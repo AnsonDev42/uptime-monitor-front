@@ -37,7 +37,7 @@ export function TrackerUsageExample() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000/";
 
   return (
-    <Card className="mx-auto max-w-md">
+    <Card className="mx-auto max-w-lg">
       <p className="text-tremor-default flex items-center justify-between">
         <span className="text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium">
           {baseUrl}
