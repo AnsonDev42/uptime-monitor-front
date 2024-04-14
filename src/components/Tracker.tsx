@@ -1,52 +1,101 @@
 import { Card, Tracker, type Color } from "@tremor/react";
+import useSWR from "swr";
+import React from "react";
+import GenerateMockData from "@/app/status/DemoTrackerData";
+import { toast } from "sonner";
 
-interface Tracker {
+// one day (data point) of a tracker data; a track normally have 30 days of data
+export interface TrackerData {
   color: Color;
   tooltip: string;
 }
 
-const data: Tracker[] = [
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "rose", tooltip: "Downtime" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "gray", tooltip: "Maintenance" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "emerald", tooltip: "Operational" },
-  { color: "yellow", tooltip: "Degraded" },
-  { color: "emerald", tooltip: "Operational" },
-];
+// a service with its last 30days status and uptime
+interface ServiceData {
+  [key: string]: {
+    uptime_percentage: number;
+    status: string[];
+  };
+}
 
-export function TrackerUsageExample() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000/";
+// Utility function to map status to color and tooltip
+function statusToTracker(status: string[]): TrackerData[] {
+  return status.map((s) => {
+    switch (s) {
+      case "Operational":
+        return { color: "emerald", tooltip: "Operational" };
+      case "Down":
+        return { color: "rose", tooltip: "Downtime" };
+      case "Degraded":
+        return { color: "yellow", tooltip: "Degraded" };
+      case "Maintenance":
+        return { color: "gray", tooltip: "Maintenance" };
+      default:
+        return { color: "gray", tooltip: "Unknown status" };
+    }
+  });
+}
+
+function buildATracker(
+  serviceName: string,
+  uptime_percentage: number,
+  status: string[],
+): React.JSX.Element {
+  const trackerData = statusToTracker(status);
 
   return (
     <Card className="mx-auto max-w-lg">
       <p className="text-tremor-default flex items-center justify-between">
         <span className="text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium">
-          {baseUrl}
+          {serviceName}
         </span>
         <span className="text-tremor-content dark:text-dark-tremor-content">
-          uptime 99.1%
+          uptime {uptime_percentage.toFixed(2)}%
         </span>
       </p>
-      <Tracker data={data} className="mt-2" />
+      <Tracker data={trackerData} className="mt-2" />
+      <p className="text-tremor-default flex items-center justify-between">
+        <span className="text-tremor-content-strong dark:text-dark-tremor-content font-medium">
+          30 days ago
+        </span>
+        <span className="text-tremor-content dark:text-dark-tremor-content">
+          Today
+        </span>
+      </p>
     </Card>
+  );
+}
+
+// build multiple trackers from the data fetched from the server(trackerAPI)
+export function TrackerBatchData() {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000/";
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+  let { data, error, isLoading } = useSWR(
+    `${baseUrl}uptime/trackers/`,
+    fetcher,
+  );
+  const demoData = GenerateMockData();
+  if (isLoading) return <p>Loading...</p>;
+  if (error) {
+    data = demoData;
+    toast.warning(
+      `An error occurred:Error fetching data: ${error.toString()}. Are you on demo? `,
+      {},
+    );
+  }
+  if (!data) return <p>No data available</p>;
+
+  return (
+    <>
+      {Object.entries(data as ServiceData).map(
+        ([serviceName, serviceDetails]) =>
+          buildATracker(
+            serviceName,
+            serviceDetails.uptime_percentage,
+            serviceDetails.status,
+          ),
+      )}
+    </>
   );
 }

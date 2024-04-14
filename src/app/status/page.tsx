@@ -4,7 +4,7 @@ import Link from "next/link";
 import { BugIcon } from "@/components/BugIcon";
 import { HomeIcon } from "@/components/HomeIcon";
 import { CalendarIcon } from "@/components/CalendarIcon";
-import { TrackerUsageExample } from "@/components/Tracker";
+import { TrackerBatchData } from "@/components/Tracker";
 
 export default function Page() {
   return (
@@ -38,10 +38,9 @@ export default function Page() {
         <div className=" ltr bg-gray-100 border-t border-b border-gray-200 dark:border-gray-800 dark:bg-gray-950">
           <div className=" mx-auto  grid-cols-1 max-w-3xl py-12 ">
             <div className=" col-span-1 gap-8 space-y-8">
-              <div className=" ">
-                <TrackerUsageExample />
-              </div>
-              <TrackerUsageExample />
+              {/*<div className=" ">*/}
+              <TrackerBatchData />
+              {/*</div>*/}
             </div>
           </div>
         </div>

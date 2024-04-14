@@ -21,7 +21,7 @@ import { PopUpFormWrapper } from "@/components/service-form";
 import { DemoData } from "@/app/demo-data";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { TrackerUsageExample } from "@/components/Tracker";
+import { TrackerUsageExample } from "@/app/status/DemoTrackerData";
 
 const Services = dynamic(
   () =>
