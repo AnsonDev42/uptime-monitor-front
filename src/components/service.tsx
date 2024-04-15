@@ -9,8 +9,6 @@ import { AlertTriangleIcon, CheckCircleIcon } from "@/components/icons";
 
 import Link from "next/link";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
-
 interface ServiceData {
   id: number;
   name: string;
@@ -38,7 +36,26 @@ interface PeriodicTaskOption {
 
 export function Services() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000/";
-  let { data, error, isLoading } = useSWR(`${baseUrl}service/`, fetcher);
+  const fetcher = (baseUrl: string | URL | Request) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 10 seconds timeout
+
+    return fetch(baseUrl, { signal: controller.signal })
+      .then((res) => {
+        clearTimeout(timeoutId);
+        return res.json();
+      })
+      .catch((error) => {
+        if (error.name === "AbortError") {
+          throw new Error("Response timed out");
+        }
+        throw error;
+      });
+  };
+  let { data, error, isLoading } = useSWR(`${baseUrl}service/`, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
   if (isLoading) return <>Loading...</>;
   if (!data)
     return (

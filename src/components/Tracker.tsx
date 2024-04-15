@@ -36,7 +36,7 @@ function statusToTracker(status: string[]): TrackerData[] {
   });
 }
 
-function buildATracker(
+export function BuildATracker(
   serviceName: string,
   uptime_percentage: number,
   status: string[],
@@ -69,11 +69,29 @@ function buildATracker(
 // build multiple trackers from the data fetched from the server(trackerAPI)
 export function TrackerBatchData() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000/";
-  const fetcher = (url: string) => fetch(url).then((res) => res.json());
+  const fetcher = (baseUrl: string | URL | Request) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 10 seconds timeout
 
+    return fetch(baseUrl, { signal: controller.signal })
+      .then((res) => {
+        clearTimeout(timeoutId);
+        return res.json();
+      })
+      .catch((error) => {
+        if (error.name === "AbortError") {
+          throw new Error("Response timed out");
+        }
+        throw error;
+      });
+  };
   let { data, error, isLoading } = useSWR(
     `${baseUrl}uptime/trackers/`,
     fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
   );
   const demoData = GenerateMockData();
   if (isLoading) return <p>Loading...</p>;
@@ -90,7 +108,7 @@ export function TrackerBatchData() {
     <>
       {Object.entries(data as ServiceData).map(
         ([serviceName, serviceDetails]) =>
-          buildATracker(
+          BuildATracker(
             serviceName,
             serviceDetails.uptime_percentage,
             serviceDetails.status,
