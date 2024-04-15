@@ -99,7 +99,16 @@ export function Services() {
           <TableCell>
             <Checkbox />
           </TableCell>
-          <TableCell>{service.name}</TableCell>
+          <TableCell>
+            <Link
+              href={{
+                pathname: "/stats",
+                query: { id: "17" },
+              }}
+            >
+              {service.name}
+            </Link>
+          </TableCell>
           <TableCell>{service.monitoring_type}</TableCell>
           <TableCell>
             {formatDistance(new Date(service.updated_at), new Date(), {
