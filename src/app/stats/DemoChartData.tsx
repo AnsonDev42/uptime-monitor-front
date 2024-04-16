@@ -1,4 +1,4 @@
-import { ChartData } from "@/components/CurveLineChart";
+import { ChartData, ServiceSummary } from "@/components/CurveLineChart";
 
 export const demoChartData: ChartData = {
   id: "Uptime",
@@ -9,4 +9,12 @@ export const demoChartData: ChartData = {
     { x: "9:45", y: 88.6 },
     { x: "9:50", y: 99.5 },
   ],
+};
+
+export const demoSummaryData: ServiceSummary = {
+  service_name: "ollama API",
+  monitoring_method: "PING",
+  average_response_time: 120,
+  uptime_percentage: 99.9,
+  errors: 1,
 };

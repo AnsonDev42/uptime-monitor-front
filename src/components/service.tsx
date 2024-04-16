@@ -103,7 +103,7 @@ export function Services() {
             <Link
               href={{
                 pathname: "/stats",
-                query: { id: "17" },
+                query: { service_id: service.id },
               }}
             >
               {service.name}

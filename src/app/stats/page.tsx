@@ -9,12 +9,16 @@ import {
   ChartData,
   ChartPoint,
   CurvedLineChart,
+  ServiceSummary,
   UptimeRecord,
 } from "@/components/CurveLineChart";
-import { demoChartData } from "@/app/stats/DemoChartData";
+import { demoChartData, demoSummaryData } from "@/app/stats/DemoChartData";
+import { ServiceOverViewCard } from "@/components/ServiceOverViewCard";
 
 export default function Page() {
   const [chartData, setChartData] = useState<ChartData>(demoChartData);
+  const [summaryData, setSummaryData] =
+    useState<ServiceSummary>(demoSummaryData);
 
   useEffect(() => {
     const fetchChartData = async () => {
@@ -28,6 +32,7 @@ export default function Page() {
         // parsing the response to summary and records(data points)
         const records: ApiResponse = jsonResponse;
         //  skipping the summary
+        setSummaryData(records.summary);
         const parsedData: ChartPoint[] = records.data.map(
           (record: UptimeRecord) => {
             return {
@@ -39,6 +44,7 @@ export default function Page() {
         setChartData({ id: "uptime", data: parsedData });
       } catch (error) {
         setChartData(demoChartData);
+        setSummaryData(demoSummaryData);
         console.error("Failed to fetch  channels:", error);
         toast.warning(
           "An error occurred: Back-end not detected, you are on demo? ",
@@ -52,6 +58,7 @@ export default function Page() {
       })
       .catch((error) => {
         setChartData(demoChartData);
+        setSummaryData(demoSummaryData);
       });
   }, []);
   return (
@@ -67,39 +74,7 @@ export default function Page() {
             </div>
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid gap-2">
-            <h1 className="font-semibold text-3xl">ollama API details</h1>
-            <p className="text-gray-500 dark:text-gray-400">
-              My ollama API server in my home lab server.
-            </p>
-          </div>
-        </CardContent>
-
-        <Card className="p-0 overflow-hidden">
-          <CardContent className="grid gap-4 text-sm p-6">
-            <div className="grid grid-cols-2 items-center gap-4">
-              <div className="font-semibold">Service Name</div>
-              <div>ollama API</div>
-            </div>
-            <div className="grid grid-cols-2 items-center gap-4">
-              <div className="font-semibold">Monitoring Method</div>
-              <div>PING</div>
-            </div>
-            <div className="grid grid-cols-2 items-center gap-4">
-              <div className="font-semibold">Uptime</div>
-              <div>99.9%</div>
-            </div>
-            <div className="grid grid-cols-2 items-center gap-4">
-              <div className="font-semibold">Response Time</div>
-              <div>120ms</div>
-            </div>
-            <div className="grid grid-cols-2 items-center gap-4">
-              <div className="font-semibold">Errors</div>
-              <div>0</div>
-            </div>
-          </CardContent>
-        </Card>
+        <ServiceOverViewCard data={summaryData} />
         <Card className="p-0 overflow-hidden">
           <CardContent className="flex flex-col p-6">
             <h2 className="font-semibold text-lg">Uptime</h2>

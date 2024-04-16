@@ -3,12 +3,16 @@ import { ResponsiveLine, Serie } from "@nivo/line";
 import React, { useEffect, useState } from "react";
 
 export interface ApiResponse {
-  summary: UptimeSummary; // Adjust this based on the actual structure of your summary
+  summary: ServiceSummary; // Adjust this based on the actual structure of your summary
   data: UptimeRecord[];
 }
 
-export interface UptimeSummary {
+export interface ServiceSummary {
+  service_name: string;
+  monitoring_method: string;
+  average_response_time: number;
   uptime_percentage: number;
+  errors: number;
 }
 
 export interface UptimeRecord {
