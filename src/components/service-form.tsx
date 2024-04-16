@@ -225,9 +225,9 @@ export function ProfileForm({
       is_active: isActive,
       notification_channel: s,
       monitoring_type: monitoringType,
-      periodic_task: {
+      periodic_task_data: {
         name: taskName,
-        task,
+        task: "",
         interval: {
           every: intervalEvery,
           period: intervalPeriod,
@@ -352,7 +352,7 @@ export function ProfileForm({
           onValueChange={(intervalPeriod) => setIntervalPeriod(intervalPeriod)}
         >
           <SelectTrigger className="w-72">
-            <SelectValue placeholder="Minutes" />
+            <SelectValue placeholder="select a time" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
