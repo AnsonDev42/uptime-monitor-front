@@ -43,11 +43,11 @@ export function PopUpFormWrapper() {
           <div className="font-semibold">
             <Button variant="outline">Add Service</Button>
           </div>
+
           <div className="text-sm text-gray-500 dark:text-gray-400">
             Start monitoring a new service
           </div>
         </div>
-        {/*<Button variant="outline">Add Service</Button>*/}
       </DialogTrigger>
       <DialogContent
         className="max-w-4xl min-w-screen-2xl"

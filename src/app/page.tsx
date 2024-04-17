@@ -22,6 +22,7 @@ import { DemoData } from "@/app/demo-data";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { TrackerUsageExample } from "@/app/status/DemoTrackerData";
+import { buttonVariants } from "@/components/ui/button";
 
 const Services = dynamic(
   () =>
@@ -37,6 +38,7 @@ export default function Home() {
       <Card className="w-full max-w-3xl mx-auto">
         <CardHeader className="grid gap-1">
           <CardTitle>Uptime Monitor</CardTitle>
+
           <CardDescription>
             Monitoring the availability of various services
           </CardDescription>
@@ -59,11 +61,20 @@ export default function Home() {
           <TrackerUsageExample />
 
           <div className="grid gap-1 text-center">
-            <PopUpFormWrapper />
+            <div className="grid gap-1 text-center">
+              <div className="font-semibold">
+                <Link
+                  href="/status"
+                  className={buttonVariants({ variant: "outline" })}
+                >
+                  Status Page
+                </Link>
+                <div className="text-sm mt-2 text-gray-500 dark:text-gray-400">
+                  Publish your service status page
+                </div>
+              </div>
+            </div>
             {/*<div className="font-semibold">Add Service</div>*/}
-            {/*<div className="text-sm text-gray-500 dark:text-gray-400">*/}
-            {/*  Start monitoring a new service*/}
-            {/*</div>*/}
           </div>
         </CardContent>
       </Card>
@@ -74,6 +85,9 @@ export default function Home() {
             <MonitorIcon className="w-6 h-6" />
             <CardTitle>Monitors</CardTitle>
           </span>
+          <div className="mr-3">
+            <PopUpFormWrapper />{" "}
+          </div>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
