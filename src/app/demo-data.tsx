@@ -3,6 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { AlertTriangleIcon, CheckCircleIcon } from "@/components/icons";
 import React from "react";
 import Link from "next/link";
+import { NotificationChannel } from "@/components/service-form";
 
 export function DemoData() {
   return (
@@ -75,14 +76,6 @@ export function DemoData() {
     </>
   );
 }
-
-type NotificationChannel = {
-  id: number;
-  name: string;
-  details: any;
-  type: string;
-  url: string;
-};
 
 export function DemoNotificationData(): NotificationChannel[] {
   return [

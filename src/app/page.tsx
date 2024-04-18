@@ -43,20 +43,6 @@ export default function Home() {
             Monitoring the availability of various services
           </CardDescription>
         </CardHeader>
-        {/*<CardContent className="flex items-center justify-center p-6">*/}
-        {/*  <TrackerUsageExample />*/}
-        {/*  <div className="flex items-center gap-2 ">*/}
-        {/*    /!*<div className="text-3xl font-semibold">99.9%</div>*!/*/}
-        {/*    <div className="grid gap-1 text-center">*/}
-        {/*      <div className="font-medium">Uptime</div>*/}
-        {/*      <div className="text-sm text-gray-500 dark:text-gray-400">*/}
-        {/*        Calculated over the last 30 days*/}
-        {/*      </div>*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*</CardContent>*/}
-        {/*</Card>*/}
-        {/*<Card className="w-full max-w-3xl mx-auto">*/}
         <CardContent className="flex items-center justify-center p-6">
           <TrackerUsageExample />
 
@@ -86,7 +72,10 @@ export default function Home() {
             <CardTitle>Monitors</CardTitle>
           </span>
           <div className="mr-3">
-            <PopUpFormWrapper />{" "}
+            <PopUpFormWrapper
+              buttonTitle={"Add Service"}
+              buttonDescription={"Start monitoring a new service"}
+            />
           </div>
         </CardHeader>
         <CardContent className="p-0">

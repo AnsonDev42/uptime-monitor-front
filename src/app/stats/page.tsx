@@ -1,66 +1,23 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ArrowRightIcon from "@/components/RightArrowIcon";
 import Link from "next/link";
-import {
-  ApiResponse,
-  ChartData,
-  ChartPoint,
-  CurvedLineChart,
-  ServiceSummary,
-  UptimeRecord,
-} from "@/components/CurveLineChart";
-import { demoChartData, demoSummaryData } from "@/app/stats/DemoChartData";
+import { CurvedLineChart, ServiceSummary } from "@/components/CurveLineChart";
+import { demoSummaryData } from "@/app/stats/DemoChartData";
 import { ServiceOverViewCard } from "@/components/ServiceOverViewCard";
+import { PopUpFormWrapper } from "@/components/service-form";
+import { useSearchParams } from "next/navigation";
+import { useServiceData } from "@/hooks/useServiceData";
+import { useExistingServiceSettings } from "@/hooks/useExistingServiceSettings";
 
 export default function Page() {
-  const [chartData, setChartData] = useState<ChartData>(demoChartData);
-  const [summaryData, setSummaryData] =
-    useState<ServiceSummary>(demoSummaryData);
+  useState<ServiceSummary>(demoSummaryData);
+  const searchParams = useSearchParams();
+  const serviceId: string = searchParams.get("service_id") as string;
+  const { existingService } = useExistingServiceSettings(serviceId);
+  const { chartData, summaryData, error } = useServiceData(serviceId);
 
-  useEffect(() => {
-    const fetchChartData = async () => {
-      try {
-        const response = await fetch(
-          "http://127.0.0.1:8000/uptime/chart/?service_id=17&time_range=1",
-          { method: "GET", headers: { "Content-Type": "application/json" } },
-        );
-        if (!response.ok) throw new Error("Failed to fetch data");
-        const jsonResponse = await response.json();
-        // parsing the response to summary and records(data points)
-        const records: ApiResponse = jsonResponse;
-        //  skipping the summary
-        setSummaryData(records.summary);
-        const parsedData: ChartPoint[] = records.data.map(
-          (record: UptimeRecord) => {
-            return {
-              x: record.time_start, // Consider formatting this date
-              y: record.uptime_percentage,
-            };
-          },
-        );
-        setChartData({ id: "uptime", data: parsedData });
-      } catch (error) {
-        setChartData(demoChartData);
-        setSummaryData(demoSummaryData);
-        console.error("Failed to fetch  channels:", error);
-        toast.warning(
-          "An error occurred: Back-end not detected, you are on demo? ",
-          {},
-        );
-      }
-    };
-    fetchChartData()
-      .then((jsonResponse) => {
-        // setChartData({ id: "uptime", data: parsedData });
-      })
-      .catch((error) => {
-        setChartData(demoChartData);
-        setSummaryData(demoSummaryData);
-      });
-  }, []);
   return (
     <>
       <Card className="w-full max-w-3xl mx-auto">
@@ -76,8 +33,19 @@ export default function Page() {
         </CardHeader>
         <ServiceOverViewCard data={summaryData} />
         <Card className="p-0 overflow-hidden">
-          <CardContent className="flex flex-col p-6">
-            <h2 className="font-semibold text-lg">Uptime</h2>
+          <CardContent className="flex flex-col  p-6">
+            {/* First row with Uptime and Edit Service */}
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="font-semibold text-lg">Uptime</h2>
+              <div>
+                <PopUpFormWrapper
+                  buttonTitle="Edit Service"
+                  buttonDescription=""
+                  existingService={existingService}
+                />
+              </div>
+            </div>
+            {/* Second row with description */}
             <p className="text-sm text-gray-500 dark:text-gray-400">
               Uptime percentage over the last 30 minutes
             </p>

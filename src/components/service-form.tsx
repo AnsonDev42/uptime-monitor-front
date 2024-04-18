@@ -30,9 +30,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { DemoNotificationData } from "@/app/demo-data";
+import useNotificationChannels from "@/hooks/useNotificationChannels";
+import { ServiceSettings } from "@/hooks/useExistingServiceSettings";
 
-export function PopUpFormWrapper() {
+export function PopUpFormWrapper(props: {
+  buttonTitle: string;
+  buttonDescription: string;
+  existingService?: any;
+}) {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -41,11 +46,11 @@ export function PopUpFormWrapper() {
         {/*the button that pops up the form to add service */}
         <div className="grid gap-1 text-center">
           <div className="font-semibold">
-            <Button variant="outline">Add Service</Button>
+            <Button variant="outline">{props.buttonTitle}</Button>
           </div>
 
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            Start monitoring a new service
+            {props.buttonDescription}
           </div>
         </div>
       </DialogTrigger>
@@ -68,14 +73,17 @@ export function PopUpFormWrapper() {
             done.
           </DialogDescription>
         </DialogHeader>
-        <ProfileForm setOpen={setOpen} />
+        <ProfileForm
+          setOpen={setOpen}
+          existingService={props.existingService}
+        />
       </DialogContent>
     </Dialog>
   );
 }
 
 // structure of channel includes url, name, details, and type
-type NotificationChannel = {
+export type NotificationChannel = {
   id: number;
   name: string;
   details: any;
@@ -134,13 +142,20 @@ function DropdownMenuCheckboxes({
   );
 }
 
-async function sendFormData(formData: any) {
+async function sendFormData(formData: any, existingService: any) {
   try {
     console.log(formData);
+    console.log(existingService);
     const baseUrl =
       process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000/";
-    const response = await fetch(`${baseUrl}service/`, {
-      method: "POST",
+    // Determine the URL based on whether we are creating or editing a service
+    const url = existingService
+      ? `${baseUrl}service/${existingService.id}/`
+      : `${baseUrl}service/`;
+    const method = existingService ? "PUT" : "POST";
+
+    const response = await fetch(url, {
+      method: method,
       headers: {
         "Content-Type": "application/json",
       },
@@ -149,9 +164,9 @@ async function sendFormData(formData: any) {
     if (!response.ok) throw new Error("Network response was not ok");
     const data = await response.json();
     console.log(data); // Handle the response data as needed
-    toast.success("A service has been created", {
-      description: "Friday, February 10, 2023 at 5:57 PM",
-    });
+    toast.success(
+      `Service has been ${existingService ? "updated" : "created"}`,
+    );
     return true;
   } catch (error) {
     console.error("There was a problem with your fetch operation:", error);
@@ -159,7 +174,7 @@ async function sendFormData(formData: any) {
       description: new Date().toLocaleString(),
       action: {
         label: "Retry",
-        onClick: () => sendFormData(formData),
+        onClick: () => sendFormData(formData, existingService),
       },
     });
     return false;
@@ -168,54 +183,51 @@ async function sendFormData(formData: any) {
 
 interface ProfileFormProps extends React.ComponentProps<"form"> {
   setOpen: (open: boolean) => void; // Add setOpen prop
+  existingService: ServiceSettings; // Prop for existing service data
 }
 
 export function ProfileForm({
-  setOpen,
-  className,
+  existingService,
   ...formProps
 }: ProfileFormProps) {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000/";
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [monitoringEndpoint, setMonitoringEndpoint] = useState("");
   const [isActive, setIsActive] = useState(true);
-  const [notificationChannel, setNotificationChannel] = useState([]);
+  const { notificationChannels, error } = useNotificationChannels(baseUrl);
+
   const [monitoringType, setMonitoringType] = useState("http");
   // States for periodic_task and its nested properties
-  const [taskName, setTaskName] = useState("");
-  const [task, setTask] = useState("");
   const [intervalEvery, setIntervalEvery] = useState(5);
   const [intervalPeriod, setIntervalPeriod] = useState("Minutes");
-  const [enabled, setEnabled] = useState(true);
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000/";
 
-  // Fetch Notification Channels from backend
+  // // Handler for the submit button
   useEffect(() => {
-    const fetchNotificationChannels = async () => {
-      try {
-        const response = await fetch(`${baseUrl}notify/`);
-        if (!response.ok) throw new Error("Network response was not ok");
-        const data = await response.json();
-        setNotificationChannel(data); // Assuming the backend returns an array of channels
-      } catch (error) {
-        // @ts-ignore
-        setNotificationChannel(DemoNotificationData);
-        console.error("Failed to fetch notification channels:", error);
-        toast.warning(
-          "An error occurred: Back-end not detected, you are on demo ",
-          {},
-        );
-      }
-    };
+    if (existingService) {
+      setName(existingService.name);
+      setDescription(
+        existingService.description ? existingService.description : "",
+      );
+      setMonitoringEndpoint(
+        existingService.monitoring_endpoint
+          ? existingService.monitoring_endpoint
+          : "",
+      );
+      setIsActive(existingService.is_active ? existingService.is_active : true);
+      setMonitoringType(
+        existingService.monitoring_type
+          ? existingService.monitoring_type
+          : "tcp",
+      );
+      // Set other fields as needed
+    }
+  }, [existingService]); // Trigger when existingService changes
 
-    fetchNotificationChannels();
-  }, []); // Empty dependency array ensures this runs once on mount
-  // Handler for the submit button
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault(); // Prevent the default form submission
-    const s = notificationChannel.map(
-      (channel: NotificationChannel) => channel.id,
-    );
+    const s = notificationChannels.map((channel) => channel.id);
     console.log(s);
     // Structure the form data according to the JSON payload
     const formData = {
@@ -226,23 +238,23 @@ export function ProfileForm({
       notification_channel: s,
       monitoring_type: monitoringType,
       periodic_task_data: {
-        name: taskName,
-        task: "",
         interval: {
           every: intervalEvery,
-          period: intervalPeriod,
+          period: intervalPeriod.toLowerCase(),
         },
-        enabled,
+        isActive,
       },
     };
-    const results = await sendFormData(formData);
+    console.log(formData);
+
+    const results = await sendFormData(formData, existingService);
     if (results) {
-      setOpen(false);
+      formProps.setOpen(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 py-4">
+    <form name="serviceForm" onSubmit={handleSubmit} className="space-y-4 py-4">
       {/* Name Input */}
       <div className="grid grid-cols-4 items-center gap-4">
         <Label htmlFor="name" className="text-right">
@@ -250,6 +262,7 @@ export function ProfileForm({
         </Label>
         <Input
           id="name"
+          defaultValue={existingService ? existingService.name : ""}
           placeholder="e.g. My blog website"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -265,8 +278,9 @@ export function ProfileForm({
         </Label>
         <Input
           id="description"
+          defaultValue={existingService ? existingService.description : ""}
           placeholder="e.g. my self host blog in the archlinux machine"
-          value={description}
+          // value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="col-span-3"
         />
@@ -279,6 +293,9 @@ export function ProfileForm({
         </Label>
         <Input
           id="monitoringEndpoint"
+          defaultValue={
+            existingService ? existingService.monitoring_endpoint : ""
+          }
           placeholder="e.g. http://localhost:3000"
           value={monitoringEndpoint}
           onChange={(e) => setMonitoringEndpoint(e.target.value)}
@@ -292,17 +309,18 @@ export function ProfileForm({
         <span className="col-span-1 text-right">Is Active</span>
         <Switch
           id="isActive"
-          defaultChecked={true}
+          defaultChecked={existingService ? existingService.is_active : true}
+          checked={true}
           onCheckedChange={(checked: boolean) => setIsActive(checked)}
         />
       </div>
 
       {/* Notification Channel Select */}
       <div className="grid grid-cols-4 items-center gap-4">
-        <Label htmlFor="notificationChannel" className="text-right">
+        <Label htmlFor="notificationChannels" className="text-right">
           Notification Channel
         </Label>
-        <DropdownMenuCheckboxes notificationChannels={notificationChannel} />
+        <DropdownMenuCheckboxes notificationChannels={notificationChannels} />
       </div>
 
       {/* Monitoring Type Select */}
@@ -331,6 +349,9 @@ export function ProfileForm({
         </Label>
         <Input
           id="IntervalEvery"
+          defaultValue={
+            existingService ? existingService.periodic_task.every : 10
+          }
           placeholder="Enter the interval, e.g., 10 "
           value={intervalEvery}
           onChange={(e) => {
@@ -348,17 +369,29 @@ export function ProfileForm({
         <Label htmlFor="interval period" className="text-right">
           Interval Period
         </Label>
+
         <Select
-          onValueChange={(intervalPeriod) => setIntervalPeriod(intervalPeriod)}
+          defaultValue={
+            existingService ? existingService.periodic_task.period : "minutes"
+          }
+          onValueChange={(intervalPeriod) =>
+            setIntervalPeriod(intervalPeriod.toLowerCase())
+          }
         >
           <SelectTrigger className="w-72">
-            <SelectValue placeholder="select a time" />
+            <SelectValue
+              placeholder={
+                existingService
+                  ? (existingService.periodic_task.period as string)
+                  : "Select a period"
+              }
+            />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="seconds">Second</SelectItem>
-              <SelectItem value="minutes">Minute</SelectItem>
-              <SelectItem value="days">Day</SelectItem>
+              <SelectItem value="seconds">Seconds</SelectItem>
+              <SelectItem value="minutes">Minutes</SelectItem>
+              <SelectItem value="days">Days</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
