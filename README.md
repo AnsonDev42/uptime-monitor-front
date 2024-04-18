@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# uptime-monitor-front
+[![Docker Image CI](https://github.com/AnsonDev42/uptime-monitor/actions/workflows/docker-image.yml/badge.svg)](https://github.com/AnsonDev42/uptime-monitor/actions/workflows/docker-image.yml)
+---
+- This repo is the front-end implementation of the following project. 
+- See [back-end implementation here](https://uptime-monitor-front.pages.dev)
+---
 
-## Getting Started
+###  Demo
+Click [here](https://uptime-monitor-front.pages.dev) to see for yourself
 
-First, run the development server:
+![image](https://github.com/AnsonDev42/uptime-monitor-front/assets/58594437/9a119264-49b8-4f08-9810-6198456b27ad)
+![image](https://github.com/AnsonDev42/uptime-monitor-front/assets/58594437/308529f3-e8f4-4f96-85e6-f845e572c603)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Running / Building PART1/2 (for front-end)
+Installing Bun (the front-end package manager): https://bun.sh/
+- Install dependencies(only need to run once) : `bun install`
+- Run for development: `bun run dev`
+- Build for production: `bun build`
 
-## Learn More
+Fork this repo and you can easily deploy it for free in [Cloudflare Page](https://pages.cloudflare.com/), [Vercel](https://vercel.com/) and etc.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Running / Building PART2/2 method1 **RECOMMENDED** (for backend-end)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Installing [Docker and Docker-compose](https://docs.docker.com/compose/install/)
+- modify your configration in `docker-compose.yml` file if needed
+- copy the `.env.dev` to `.env`, modify in `.env`
+- docker-compose up
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Running / Building PART2: method2 (for backend-end)
+Installing [peotry](https://python-poetry.org/) (the back-end package manager for python):
+- copy the `.env.dev` to `.env`, modify in `.env`
+- Install dependencies(only need to run once) : `poetry install`
+- Install your postgresDB **and** rabbitMQ
+- In one shell: `./manage.py runserver`
+- In another new shell: `celery -A uptimemonitor worker --loglevel=INFO`
+- In another new shell: `celery -A uptimemonitor beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler`
+  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+---
+
+### Objectives:
+- a uptime dashboard ([Django-backend](https://github.com/AnsonDev42/uptime-monitor) + [NextJS-frontend(Client-Side-Render) in **TypeScript**](https://github.com/AnsonDev42/uptime-monitor-front)
+- notify user when server is down and when server is restored
