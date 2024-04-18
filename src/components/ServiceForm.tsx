@@ -91,9 +91,9 @@ export type NotificationChannel = {
   url: string;
 };
 
-interface DropdownMenuCheckboxesProps {
+type DropdownMenuCheckboxesProps = {
   notificationChannels: NotificationChannel[];
-}
+};
 
 function DropdownMenuCheckboxes({
   notificationChannels,

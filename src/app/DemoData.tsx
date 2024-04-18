@@ -3,7 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { AlertTriangleIcon, CheckCircleIcon } from "@/components/icons";
 import React from "react";
 import Link from "next/link";
-import { NotificationChannel } from "@/components/service-form";
+import { NotificationChannel } from "@/components/ServiceForm";
 
 export function DemoData() {
   return (

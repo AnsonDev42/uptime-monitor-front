@@ -17,7 +17,7 @@ import React, { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { MonitorIcon } from "@/components/icons";
 import { PopUpFormWrapper } from "@/components/ServiceForm";
-import { DemoData } from "@/app/demo-data";
+import { DemoData } from "@/app/DemoData";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { TrackerUsageExample } from "@/app/status/DemoTrackerData";
