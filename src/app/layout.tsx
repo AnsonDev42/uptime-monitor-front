@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ModeToggle, ThemeProvider } from "@/components/ThemeProvider";
 import React from "react";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -29,6 +29,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <div className="fixed top-4 right-4">
+            <ModeToggle />
+          </div>
         </ThemeProvider>
         <Toaster richColors closeButton expand={true} />
       </body>

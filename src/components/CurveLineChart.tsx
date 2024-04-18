@@ -1,11 +1,6 @@
 "use client";
-import { ResponsiveLine, Serie } from "@nivo/line";
-import React, { useEffect, useState } from "react";
-
-export interface ApiResponse {
-  summary: ServiceSummary; // Adjust this based on the actual structure of your summary
-  data: UptimeRecord[];
-}
+import { ResponsiveLine } from "@nivo/line";
+import React from "react";
 
 export interface ServiceSummary {
   service_name: string;

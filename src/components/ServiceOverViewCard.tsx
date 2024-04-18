@@ -3,13 +3,17 @@ import React from "react";
 import { ServiceSummary } from "@/components/CurveLineChart";
 
 export function ServiceOverViewCard({ data }: { data: ServiceSummary }) {
+  let serviceName = data.service_name ? data.service_name : "ollama API";
+  let monitoringMethod = data.monitoring_method
+    ? data.monitoring_method
+    : "PING";
   return (
     <>
       <CardContent>
         <div className="grid gap-2">
-          <h1 className="font-semibold text-3xl">ollama API details</h1>
+          <h1 className="font-semibold text-3xl">{serviceName} details</h1>
           <p className="text-gray-500 dark:text-gray-400">
-            My ollama API server in my home lab server.
+            My {serviceName} server in my home lab server.
           </p>
         </div>
       </CardContent>
@@ -21,7 +25,7 @@ export function ServiceOverViewCard({ data }: { data: ServiceSummary }) {
           </div>
           <div className="grid grid-cols-2 items-center gap-4">
             <div className="font-semibold">Monitoring Method</div>
-            <div>{data.monitoring_method}</div>
+            <div>{monitoringMethod}</div>
           </div>
           <div className="grid grid-cols-2 items-center gap-4">
             <div className="font-semibold">Uptime</div>

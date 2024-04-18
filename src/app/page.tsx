@@ -16,8 +16,7 @@ import {
 import React, { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { MonitorIcon } from "@/components/icons";
-import { ModeToggle } from "@/components/theme-provider";
-import { PopUpFormWrapper } from "@/components/service-form";
+import { PopUpFormWrapper } from "@/components/ServiceForm";
 import { DemoData } from "@/app/demo-data";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
@@ -26,7 +25,7 @@ import { buttonVariants } from "@/components/ui/button";
 
 const Services = dynamic(
   () =>
-    import("@/components/service").then((module) => ({
+    import("@/components/Service").then((module) => ({
       default: module.Services,
     })),
   { ssr: false },
@@ -113,9 +112,6 @@ export default function Home() {
             GitHub
           </Link>
         </div>
-      </div>
-      <div className="fixed top-4 right-4">
-        <ModeToggle />
       </div>
     </>
   );

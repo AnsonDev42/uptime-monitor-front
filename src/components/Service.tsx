@@ -18,27 +18,11 @@ interface ServiceData {
   monitoring_type: string; // Maps to monitoring_type, could make this an enum or union type if you have defined choices
 }
 
-interface ServiceFormValues {
-  name: string;
-  description: string;
-  monitoring_endpoint: string;
-  is_active: boolean;
-  notification_channel: string[];
-  monitoring_type: string;
-  periodic_task_id?: string | null;
-  periodic_task?: any; // Adjust based on your actual periodic task data structure
-}
-
-interface PeriodicTaskOption {
-  label: string;
-  value: string;
-}
-
 export function Services() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000/";
   const fetcher = (baseUrl: string | URL | Request) => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 10 seconds timeout
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
 
     return fetch(baseUrl, { signal: controller.signal })
       .then((res) => {

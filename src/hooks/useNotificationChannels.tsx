@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { DemoNotificationData } from "@/app/demo-data";
-import { NotificationChannel } from "@/components/service-form";
+import { NotificationChannel } from "@/components/ServiceForm";
 
 export default function useNotificationChannels(baseUrl: string) {
   const [notificationChannels, setNotificationChannels] = useState<

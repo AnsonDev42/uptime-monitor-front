@@ -71,7 +71,7 @@ export function TrackerBatchData() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:8000/";
   const fetcher = (baseUrl: string | URL | Request) => {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); // 10 seconds timeout
+    const timeoutId = setTimeout(() => controller.abort(), 3000); // 10 seconds timeout
 
     return fetch(baseUrl, { signal: controller.signal })
       .then((res) => {

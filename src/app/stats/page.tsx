@@ -6,7 +6,7 @@ import Link from "next/link";
 import { CurvedLineChart, ServiceSummary } from "@/components/CurveLineChart";
 import { demoSummaryData } from "@/app/stats/DemoChartData";
 import { ServiceOverViewCard } from "@/components/ServiceOverViewCard";
-import { PopUpFormWrapper } from "@/components/service-form";
+import { PopUpFormWrapper } from "@/components/ServiceForm";
 import { useSearchParams } from "next/navigation";
 import { useServiceData } from "@/hooks/useServiceData";
 import { useExistingServiceSettings } from "@/hooks/useExistingServiceSettings";
