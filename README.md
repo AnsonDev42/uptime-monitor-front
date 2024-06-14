@@ -2,12 +2,13 @@
 [![Docker Image CI](https://github.com/AnsonDev42/uptime-monitor/actions/workflows/docker-image.yml/badge.svg)](https://github.com/AnsonDev42/uptime-monitor/actions/workflows/docker-image.yml)
 ---
 - This repo is the front-end implementation of the following project. 
-- See [back-end implementation here](https://uptime-monitor-front.pages.dev)
+- See [back-end implementation here](https://github.com/AnsonDev42/uptime-monitor)
 ---
 
 ###  Demo
-Click [here](https://uptime-monitor-front.pages.dev) to see for yourself
+Click the front-end demo [in here](https://uptime-monitor-front.pages.dev) to see what this project does.
 
+or check the screenshot below.
 ![image](https://github.com/AnsonDev42/uptime-monitor-front/assets/58594437/9a119264-49b8-4f08-9810-6198456b27ad)
 ![image](https://github.com/AnsonDev42/uptime-monitor-front/assets/58594437/308529f3-e8f4-4f96-85e6-f845e572c603)
 
