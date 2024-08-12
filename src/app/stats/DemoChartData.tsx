@@ -13,7 +13,7 @@ export const demoChartData: ChartData = {
 
 export const demoSummaryData: ServiceSummary = {
   service_name: "ollama API",
-  monitoring_method: "PING",
+  monitoring_type: "PING",
   average_response_time: 120,
   uptime_percentage: 99.9,
   errors: 1,

@@ -4,9 +4,7 @@ import { ServiceSummary } from "@/components/CurveLineChart";
 
 export function ServiceOverViewCard({ data }: { data: ServiceSummary }) {
   let serviceName = data.service_name ? data.service_name : "ollama API";
-  let monitoringMethod = data.monitoring_method
-    ? data.monitoring_method
-    : "PING";
+  let monitoringMethod = data.monitoring_type ? data.monitoring_type : "PING";
   return (
     <>
       <CardContent>

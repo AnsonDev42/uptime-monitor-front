@@ -75,7 +75,6 @@ export function Services() {
         </TableRow>
       </>
     );
-
   return (
     <>
       {data.map((service: ServiceData) => (
@@ -93,7 +92,7 @@ export function Services() {
               {service.name}
             </Link>
           </TableCell>
-          <TableCell>{service.monitoring_type}</TableCell>
+          <TableCell>{service.monitoring_type.toUpperCase()}</TableCell>
           <TableCell>
             {formatDistance(new Date(service.updated_at), new Date(), {
               addSuffix: true,

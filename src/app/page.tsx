@@ -23,15 +23,22 @@ import Link from "next/link";
 import { TrackerUsageExample } from "@/app/status/DemoTrackerData";
 import { buttonVariants } from "@/components/ui/button";
 
-const Services = dynamic(
-  () =>
-    import("@/components/Service").then((module) => ({
-      default: module.Services,
-    })),
-  { ssr: false },
-);
-
+// const Services = dynamic(
+//   () =>
+//     import("@/components/Service").then((module) => ({
+//       default: module.Services,
+//     })),
+//   { ssr: false },
+// );
+//
 export default function Home() {
+  const Services = dynamic(
+    () =>
+      import("@/components/Service").then((module) => ({
+        default: module.Services,
+      })),
+    { ssr: false },
+  );
   return (
     <>
       <Card className="w-full max-w-3xl mx-auto">

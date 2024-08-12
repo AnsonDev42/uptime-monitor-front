@@ -26,7 +26,18 @@ export function useServiceData(serviceId: string) {
         );
         if (!response.ok) throw new Error("Failed to fetch data");
         const jsonResponse = await response.json();
-        setSummaryData(jsonResponse.summary);
+        let monitoringType = "N/A";
+
+        // setSummaryData(jsonResponse.summary);
+        // try {
+        //   monitoringType = jsonResponse.summary.monitoring_type.toUpperCase();
+        // } catch (e) {
+        //   console.error(e);
+        // }
+        setSummaryData((summaryData) => ({
+          ...summaryData,
+          monitoring_type: summaryData.monitoring_type.toUpperCase(),
+        }));
         const parsedData: ChartPoint[] = jsonResponse.data.map(
           (record: UptimeRecord) => ({
             x: record.time_start, // Consider formatting this date

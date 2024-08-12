@@ -4,7 +4,7 @@ import React from "react";
 
 export interface ServiceSummary {
   service_name: string;
-  monitoring_method: string;
+  monitoring_type: string;
   average_response_time: number;
   uptime_percentage: number;
   errors: number;
