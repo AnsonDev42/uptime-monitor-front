@@ -13,7 +13,8 @@ export default function useNotificationChannels(baseUrl: string) {
     async function fetchNotificationChannels() {
       try {
         const response = await fetch(`${baseUrl}notify/`);
-        if (!response.ok) throw new Error("Network response was not ok");
+        if (!response.ok)
+          console.error("Failed to fetch notification channels");
         const data: NotificationChannel[] = await response.json();
         setNotificationChannels(data);
       } catch (error) {

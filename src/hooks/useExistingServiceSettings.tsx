@@ -23,7 +23,7 @@ export function useExistingServiceSettings(serviceId: string) {
           `http://127.0.0.1:8000/service/${serviceId}`,
           { method: "GET", headers: { "Content-Type": "application/json" } },
         );
-        if (!response.ok) throw new Error("Failed to fetch data");
+        if (!response.ok) console.error("Failed to fetch data");
         const serviceSettings: ServiceSettings = await response.json();
         setExistingService(serviceSettings);
       } catch (error) {

@@ -24,7 +24,7 @@ export function useServiceData(serviceId: string) {
             headers: { "Content-Type": "application/json" },
           },
         );
-        if (!response.ok) throw new Error("Failed to fetch data");
+        if (!response.ok) console.error("Failed to fetch data");
         const jsonResponse = await response.json();
         let monitoringType = "N/A";
 

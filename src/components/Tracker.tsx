@@ -80,9 +80,9 @@ export function TrackerBatchData() {
       })
       .catch((error) => {
         if (error.name === "AbortError") {
-          throw new Error("Response timed out");
+          // throw new Error("Response timed out");
         }
-        throw error;
+        // throw error;
       });
   };
   let { data, error, isLoading } = useSWR(

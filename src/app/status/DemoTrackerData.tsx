@@ -29,14 +29,14 @@ export default function GenerateMockData() {
   }
 
   // Convert to the required format for TrackerBatchData
-  const formattedData = {};
+  const formattedData: {
+    [key: string]: { uptime_percentage: number; status: string[] };
+  } = {};
   services.forEach((service) => {
-    // @ts-ignore
-    service.statuses = generateStatuses();
-    // @ts-ignore
+    const statuses = generateStatuses();
     formattedData[service.name] = {
       uptime_percentage: service.uptime,
-      status: service.statuses,
+      status: statuses,
     };
   });
 

@@ -161,7 +161,7 @@ async function sendFormData(formData: any, existingService: any) {
       },
       body: JSON.stringify(formData),
     });
-    if (!response.ok) throw new Error("Network response was not ok");
+    if (!response.ok) return false;
     const data = await response.json();
     console.log(data); // Handle the response data as needed
     toast.success(
